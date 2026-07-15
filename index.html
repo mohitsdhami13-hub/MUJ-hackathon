@@ -32,8 +32,8 @@
       background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(13,11,8,0.7) 100%);
     }
 
-    .cur{width:10px;height:10px;border-radius:50%;background:var(--amber);position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:screen;transform:translate(-50%,-50%);transition:width .25s,height .25s}
-    .cur-r{width:36px;height:36px;border-radius:50%;border:1px solid rgba(200,149,74,.4);position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+    .cur{width:10px;height:10px;border-radius:50%;background:var(--amber);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:screen;transform:translate3d(-100px,-100px,0);transition:width .25s,height .25s}
+    .cur-r{width:36px;height:36px;border-radius:50%;border:1px solid rgba(200,149,74,.4);position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate3d(-100px,-100px,0);transition:width .12s,height .12s,border-color .12s}
 
     nav{
       position:fixed;top:0;left:0;right:0;z-index:200;
@@ -634,9 +634,9 @@
 <script>
 const cur = document.getElementById('cur');
 const curR = document.getElementById('cur-r');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-(function ac(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(ac)})();
+let mx=-100,my=-100,rx=-100,ry=-100;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.transform=`translate3d(calc(${mx}px - 50%),calc(${my}px - 50%),0)`});
+(function ac(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;curR.style.transform=`translate3d(calc(${rx}px - 50%),calc(${ry}px - 50%),0)`;requestAnimationFrame(ac)})();
 document.querySelectorAll('a,.pc,.ts-c,.int-btn,.mc-btn,.nav-links li').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';curR.style.width='54px';curR.style.height='54px';curR.style.borderColor='rgba(200,149,74,.65)'});
   el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';curR.style.width='36px';curR.style.height='36px';curR.style.borderColor='rgba(200,149,74,.4)'});
