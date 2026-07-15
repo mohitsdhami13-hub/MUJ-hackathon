@@ -41,15 +41,15 @@
       backdrop-filter:blur(16px);
       border-bottom:1px solid var(--gb);
     }
-    .nb{display:flex;align-items:center;gap:.9rem}
+    .nb{display:flex;align-items:center;gap:.9rem; flex: 1}
     .nb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:breathe 3s ease-in-out infinite}
     @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
     .nb-word{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.18em;color:var(--fog2);text-transform:uppercase}
     .nb-word span{color:var(--amber)}
-    .nav-links{display:flex;gap:2.2rem;list-style:none}
+    .nav-links{display:flex;gap:2.2rem;list-style:none; flex: 1; justify-content: center}
     .nav-links a{font-size:.68rem;letter-spacing:.1em;color:var(--fog);text-decoration:none;text-transform:uppercase;transition:color .3s;font-family:'Space Mono',monospace}
     .nav-links a:hover{color:var(--amber2)}
-    .nav-r{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--fog);letter-spacing:.12em}
+    .nav-r{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--fog);letter-spacing:.12em; flex: 1; text-align: right}
 
     section{position:relative;z-index:10}
 
@@ -439,7 +439,7 @@
     <li><a href="#dashboard">Console</a></li>
     <li><a href="#ethics">Ethics</a></li>
   </ul>
-  <span class="nav-r">Team Maze · MUJ 2026</span>
+  <span class="nav-r">Team Maze · Mohit · MUJ 2026</span>
 </nav>
 
 <section id="hero">
