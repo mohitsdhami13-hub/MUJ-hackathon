@@ -24,11 +24,8 @@ This project is built as a highly optimized, dependency-free Single Page Applica
 - **Vanilla JavaScript**: Handling DOM manipulation, custom charting, and modal logic.
 - **Three.js (ES Modules via CDN)**: Used for the immersive WebGL background scene, custom shaders, and post-processing.
 
-## 🚀 How to Run Locally
-Because the project is a pure frontend SPA with no local build steps:
-1. Clone the repository.
-2. Open `index.html` in any modern web browser.
-3. *Note: For the Three.js ES Modules to load correctly without CORS errors in some browsers, you may need to serve it via a simple local server (e.g., `npx serve` or the VS Code Live Server extension).*
+## 🚀 Live Demo
+The project is hosted live on Vercel. You can experience the console here: **[Insert Vercel Link Here]**
 
 ## 👥 Team Maze
 Built with care by **Team Maze** for the MUJ 2026 Hackathon.
