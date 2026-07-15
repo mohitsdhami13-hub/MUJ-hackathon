@@ -215,8 +215,10 @@
     /* Tooltip */
     #tt{
       position:absolute;pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:20;
-      background:var(--ink2);border:1px solid rgba(200,149,74,.3);border-radius:10px;
+      background:rgba(42,35,24,0.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border:1px solid rgba(200,149,74,.25);border-radius:10px;
       padding:.8rem 1.1rem;min-width:160px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .tt-w{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.15em;color:var(--amber);text-transform:uppercase;margin-bottom:.35rem}
     .tt-s{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--warm);line-height:1.2}
