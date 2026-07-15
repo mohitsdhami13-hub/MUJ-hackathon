@@ -24,6 +24,9 @@
     html::-webkit-scrollbar{display:none;}
     body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;cursor:none; -ms-overflow-style:none; scrollbar-width:none;}
     body::-webkit-scrollbar{display:none;}
+    * { cursor: none !important; }
+    body.no-scroll { overflow: hidden; }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
 
     #c3d{position:fixed;inset:0;z-index:0;pointer-events:none}
 
@@ -115,9 +118,10 @@
       gap:1px;background:var(--gb);border:1px solid var(--gb);
     }
     .pc{
-      background:var(--ink1);padding:3rem 2.5rem;
+      background:rgba(26,22,16,0.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:3rem 2.5rem;
       position:relative;overflow:hidden;cursor:pointer;
-      transition:background .5s;
+      transition:background .5s,box-shadow .5s;
     }
     .pc::after{
       content:'';position:absolute;inset:0;
@@ -131,7 +135,7 @@
       transition:width .6s cubic-bezier(.23,1,.32,1);
     }
     .pc:hover::before{width:100%}
-    .pc:hover{background:rgba(200,149,74,.025)}
+    .pc:hover{background:rgba(200,149,74,.04);box-shadow:0 12px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06)}
     .pc-num{
       font-family:'Space Mono',monospace;font-size:.48rem;
       letter-spacing:.2em;color:var(--amber);text-transform:uppercase;
@@ -236,10 +240,11 @@
       gap:2px;margin-bottom:2px;
     }
     .mc{
-      background:var(--ink2);padding:2.2rem 2rem;position:relative;overflow:hidden;
+      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:2.2rem 2rem;position:relative;overflow:hidden;
       transition:background .3s;cursor:default;
     }
-    .mc:hover{background:var(--ink3)}
+    .mc:hover{background:rgba(58,50,40,0.4)}
     .mc::after{
       content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
       background:linear-gradient(to right,transparent,var(--amber),transparent);
@@ -255,7 +260,8 @@
     .mb{height:2px;background:var(--gb);border-radius:1px;margin-top:.8rem;overflow:hidden}
     .mbf{height:100%;border-radius:1px;background:linear-gradient(to right,var(--olive),var(--amber));width:0;transition:width 1.6s cubic-bezier(.23,1,.32,1)}
     .ec-panel{
-      background:var(--ink2);padding:2.2rem;
+      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:2.2rem;
       border-left:1px solid var(--gb);
     }
     .ec-t{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--warm);margin-bottom:.4rem}
@@ -264,7 +270,10 @@
 
     /* Freq + intervention */
     .lower-grid{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:2px;margin-bottom:2px}
-    .lc{background:var(--ink2);padding:1.8rem 2rem}
+    .lc{
+      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:1.8rem 2rem;
+    }
     .lc-l{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:var(--fog);text-transform:uppercase;margin-bottom:1.1rem}
     .dots{display:flex;flex-wrap:wrap;gap:7px}
     .dot{width:10px;height:10px;border-radius:50%;background:var(--gb);transition:transform .2s}
@@ -277,7 +286,7 @@
 
     /* Intervention */
     .int-card{
-      background:rgba(96,136,120,.07);
+      background:rgba(96,136,120,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
       border:1px solid rgba(96,136,120,.18);
       padding:1.8rem;border-radius:4px;
     }
@@ -296,7 +305,8 @@
     /* Tapering plan */
     .taper-panel{
       margin-top:2px;padding:2.8rem;
-      background:rgba(255,255,255,.012);border:1px solid var(--gb);border-radius:16px;
+      background:rgba(255,255,255,.012);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border:1px solid var(--gb);border-radius:16px;
     }
     .tp-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
     .tp-t{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--warm)}
@@ -383,7 +393,9 @@
     }
     .mo.open{opacity:1;pointer-events:all}
     .mb-modal{
-      background:var(--ink2);border:1px solid var(--gb);border-radius:18px;
+      background:rgba(42,35,24,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      box-shadow:0 16px 64px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.06);
+      border:1px solid var(--gb);border-radius:18px;
       padding:3.5rem;max-width:540px;width:92%;
       transform:translateY(18px);transition:transform .4s ease;
     }
@@ -410,9 +422,13 @@
       #hero{padding:7rem 1.5rem 4rem}
       .pg{grid-template-columns:1fr}
       .eth-inner{grid-template-columns:1fr;gap:3.5rem}
-      .metrics-grid{grid-template-columns:repeat(3,1fr)}
+      .metrics-grid{grid-template-columns:1fr}
       .lower-grid{grid-template-columns:1fr}
-      .taper-steps{flex-wrap:wrap;gap:1.2rem}
+      .dash-head{flex-direction:column;align-items:flex-start}
+      .taper-steps{flex-direction:column;gap:1.5rem}
+      .taper-steps::before{display:none}
+      .mb-modal{padding:2.5rem}
+      #tt{display:none !important}
       #principles,#dashboard .dash-wrap,#ethics,#closing,footer{padding-left:1.5rem;padding-right:1.5rem}
     }
   </style>
@@ -466,25 +482,25 @@
 <section id="principles">
   <h2 class="s-title rv">The hardest thing we had to design away from was the impulse to intervene.</h2>
   <div class="pg rv">
-    <div class="pc" onclick="openM('w')" onmousemove="pcGlow(this,event)">
+    <div class="pc" tabindex="0" onclick="openM('w')" onkeydown="if(event.key==='Enter')openM('w')" onmousemove="pcGlow(this,event)">
       <div class="pc-num">01 / Protect</div>
       <h3 class="pc-name">Protect Wellbeing</h3>
       <p class="pc-body">The console doesn't track engagement because engagement is good. It tracks it because <em>patterns in time</em> can tell a trained human something that a grieving person can't say out loud yet.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" onclick="openM('p')" onmousemove="pcGlow(this,event)">
+    <div class="pc" tabindex="0" onclick="openM('p')" onkeydown="if(event.key==='Enter')openM('p')" onmousemove="pcGlow(this,event)">
       <div class="pc-num">02 / Illuminate</div>
       <h3 class="pc-name">Illuminate Patterns</h3>
       <p class="pc-body">Mara's sessions started at 3am. Then 2am. Then 1am. The console noted this. The counselor noticed a window. They opened it — gently. No alert was ever sent to Mara.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" onclick="openM('b')" onmousemove="pcGlow(this,event)">
+    <div class="pc" tabindex="0" onclick="openM('b')" onkeydown="if(event.key==='Enter')openM('b')" onmousemove="pcGlow(this,event)">
       <div class="pc-num">03 / Honor</div>
       <h3 class="pc-name">Honor the Bond</h3>
       <p class="pc-body">The AI presence is not a product feature. It is the closest thing to a last conversation that some people will ever have. Every system decision was made from inside that weight.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" onclick="openM('g')" onmousemove="pcGlow(this,event)">
+    <div class="pc" tabindex="0" onclick="openM('g')" onkeydown="if(event.key==='Enter')openM('g')" onmousemove="pcGlow(this,event)">
       <div class="pc-num">04 / Guide</div>
       <h3 class="pc-name">Guide, Never Police</h3>
       <p class="pc-body">The tapering plan is not a prescription. It is a sentence the counselor might begin: <em>"I've noticed the visits feel lighter lately — is that true for you?"</em></p>
@@ -629,7 +645,7 @@
   <div class="mb-modal">
     <h2 class="mt" id="mt"></h2>
     <div class="mbody" id="mbody"></div>
-    <span class="mc-btn" onclick="closeM()">Close ✕</span>
+    <span class="mc-btn" tabindex="0" onclick="closeM()" onkeydown="if(event.key==='Enter')closeM()">Close ✕</span>
   </div>
 </div>
 
@@ -733,8 +749,8 @@ const MD={
   g:{t:'Guide, Never Police',b:`<p>Early versions of this console sent a push notification to the user when the system detected "elevated dependency." We removed it in month 3 after our ethics review.</p><br><p>The problem: <em>who decides what elevated means?</em> Not the algorithm. The notification went. The counselor remained. <strong>That's the console's only job: give the counselor more to work with.</strong></p>`},
   tap:{t:'Opening the Tapering Dialogue',b:`<p>The tapering plan is never presented to Mara. It is offered to the counselor as a possible shape for a conversation.</p><br><p>The conversation might begin: <em>"I've noticed the visits feel lighter lately. Is that true for you?"</em></p><br><p>If Mara says yes, the conversation continues. If she says no, nothing changes. The console updates. The counselor listens. <strong>The timeline is hers.</strong></p>`},
 };
-function openM(k){const d=MD[k];if(!d)return;document.getElementById('mt').textContent=d.t;document.getElementById('mbody').innerHTML=d.b;document.getElementById('mo').classList.add('open');document.body.style.overflow='hidden'}
-function closeM(){document.getElementById('mo').classList.remove('open');document.body.style.overflow=''}
+function openM(k){const d=MD[k];if(!d)return;document.getElementById('mt').textContent=d.t;document.getElementById('mbody').innerHTML=d.b;document.getElementById('mo').classList.add('open');document.body.classList.add('no-scroll')}
+function closeM(){document.getElementById('mo').classList.remove('open');document.body.classList.remove('no-scroll')}
 function tryCloseM(e){if(e.target===document.getElementById('mo'))closeM()}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
