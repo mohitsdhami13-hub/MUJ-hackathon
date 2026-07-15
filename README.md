@@ -25,7 +25,7 @@ This project is built as a highly optimized, dependency-free Single Page Applica
 - **Three.js (ES Modules via CDN)**: Used for the immersive WebGL background scene, custom shaders, and post-processing.
 
 ## 🚀 Live Demo
-The project is hosted live on Vercel. You can experience the console here: **[Insert Vercel Link Here]**
+The project is hosted live on Vercel. You can experience the console here: **[https://muj-hackathon-eight.vercel.app/](https://muj-hackathon-eight.vercel.app/)**
 
 ## 👥 Team Maze
 Built with care by **Team Maze** for the MUJ 2026 Hackathon.
