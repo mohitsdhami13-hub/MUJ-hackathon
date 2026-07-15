@@ -866,6 +866,50 @@ const shellMat = new THREE.MeshBasicMaterial({
 const shell = new THREE.Mesh(shellGeo, shellMat);
 scene.add(shell);
 
+const nnGroup = new THREE.Group();
+scene.add(nnGroup);
+
+const nnGeo = new THREE.BufferGeometry();
+const nnPos = [];
+const nnNodes = [];
+const clusterCenters = [new THREE.Vector3(-65, 0, -10), new THREE.Vector3(65, 0, -10)];
+
+clusterCenters.forEach(center => {
+  for (let i = 0; i < 45; i++) {
+    const x = center.x + (Math.random() - 0.5) * 45;
+    const y = center.y + (Math.random() - 0.5) * 45;
+    const z = center.z + (Math.random() - 0.5) * 35;
+    nnNodes.push(new THREE.Vector3(x, y, z));
+    nnPos.push(x, y, z);
+  }
+});
+nnGeo.setAttribute('position', new THREE.Float32BufferAttribute(nnPos, 3));
+
+const nnMat = new THREE.PointsMaterial({
+  color: 0x80b090, size: 0.5, transparent: true, opacity: 0.6,
+  blending: THREE.AdditiveBlending, depthWrite: false,
+});
+nnGroup.add(new THREE.Points(nnGeo, nnMat));
+
+const nnLineGeo = new THREE.BufferGeometry();
+const nnLinePos = [];
+for (let i = 0; i < nnNodes.length; i++) {
+  for (let j = i + 1; j < nnNodes.length; j++) {
+    if (nnNodes[i].distanceTo(nnNodes[j]) < 16) {
+      nnLinePos.push(
+        nnNodes[i].x, nnNodes[i].y, nnNodes[i].z,
+        nnNodes[j].x, nnNodes[j].y, nnNodes[j].z
+      );
+    }
+  }
+}
+nnLineGeo.setAttribute('position', new THREE.Float32BufferAttribute(nnLinePos, 3));
+const nnLineMat = new THREE.LineBasicMaterial({
+  color: 0x508068, transparent: true, opacity: 0.12,
+  blending: THREE.AdditiveBlending, depthWrite: false,
+});
+nnGroup.add(new THREE.LineSegments(nnLineGeo, nnLineMat));
+
 const sessions = [
   {distress:.88},{distress:.80},{distress:.74},{distress:.68},
   {distress:.61},{distress:.54},{distress:.49},{distress:.46},
@@ -949,6 +993,9 @@ document.addEventListener('mousemove', e => {
 
   shell.rotation.y = t * 0.015;
   shell.rotation.x = t * 0.008;
+
+  nnGroup.rotation.y = Math.sin(t * 0.2) * 0.03;
+  nnGroup.rotation.z = Math.cos(t * 0.15) * 0.02;
 
   kLight.position.x = 22 + Math.sin(t * 0.38) * 18;
   kLight.position.y = 38 + Math.cos(t * 0.28) * 12;
