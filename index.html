@@ -20,8 +20,10 @@
       --g1:rgba(255,255,255,0.03);--gb:rgba(255,255,255,0.07);
     }
 
-    html{scroll-behavior:smooth}
-    body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+    html{scroll-behavior:smooth; -ms-overflow-style:none; scrollbar-width:none;}
+    html::-webkit-scrollbar{display:none;}
+    body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;cursor:none; -ms-overflow-style:none; scrollbar-width:none;}
+    body::-webkit-scrollbar{display:none;}
 
     #c3d{position:fixed;inset:0;z-index:0;pointer-events:none}
 
