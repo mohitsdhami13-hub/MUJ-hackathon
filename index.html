@@ -5,437 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reality Reimagined — Grief-Tech Ethics Console</title>
   <meta name="description" content="A compassionate AI counselor dashboard — not to police grief, but to protect the person inside it."/>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-    :root{
-      --cream:#f0ebe0;--warm:#fdf9f4;
-      --amber:#c8954a;--amber2:#e0b87a;--amber3:#f5d4a0;
-      --olive:#8a7d5a;--sage:#608878;--sage2:#a8c4a0;
-      --rose:#c49080;--terra:#b06040;
-      --ink:#0d0b08;--ink1:#1a1610;--ink2:#2a2318;--ink3:#3a3228;
-      --fog:#8a8070;--fog2:#b0a898;
-      --g1:rgba(255,255,255,0.03);--gb:rgba(255,255,255,0.07);
-    }
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css"/>
 
-    html{scroll-behavior:smooth; -ms-overflow-style:none; scrollbar-width:none;}
-    html::-webkit-scrollbar{display:none;}
-    body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;cursor:none; -ms-overflow-style:none; scrollbar-width:none;}
-    body::-webkit-scrollbar{display:none;}
-    * { cursor: none !important; }
-    body.no-scroll { overflow: hidden; }
-    :focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
-
-    #c3d{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-    #vignette{
-      position:fixed;inset:0;z-index:1;pointer-events:none;
-      background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(13,11,8,0.7) 100%);
-    }
-
-    .cur{width:10px;height:10px;border-radius:50%;background:var(--amber);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:screen;transform:translate3d(-100px,-100px,0) translate(-50%,-50%);transition:width .25s,height .25s}
-    .cur-r{width:36px;height:36px;border-radius:50%;border:1px solid rgba(200,149,74,.4);position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate3d(-100px,-100px,0) translate(-50%,-50%);transition:width .12s,height .12s,border-color .12s}
-
-    nav{
-      position:fixed;top:0;left:0;right:0;z-index:200;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:1.2rem 3rem;
-      background:linear-gradient(to bottom,rgba(13,11,8,.92) 60%,transparent);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid var(--gb);
-    }
-    .nb{display:flex;align-items:center;gap:.9rem; flex: 1}
-    .nb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:breathe 3s ease-in-out infinite}
-    @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
-    .nb-word{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.18em;color:var(--fog2);text-transform:uppercase}
-    .nb-word span{color:var(--amber)}
-    .nav-links{display:flex;gap:2.2rem;list-style:none; flex: 1; justify-content: center}
-    .nav-links a{font-size:.68rem;letter-spacing:.1em;color:var(--fog);text-decoration:none;text-transform:uppercase;transition:color .3s;font-family:'Space Mono',monospace}
-    .nav-links a:hover{color:var(--amber2)}
-    .nav-r{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--fog);letter-spacing:.12em; flex: 1; text-align: right}
-
-    section{position:relative;z-index:10}
-
-    #hero{
-      min-height:100vh;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      text-align:center;padding:8rem 3rem 6rem;
-    }
-    .h-kicker{
-      font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.3em;
-      color:var(--amber);text-transform:uppercase;margin-bottom:2.5rem;
-      opacity:0;animation:fu 1.2s .2s ease forwards;
-      display:flex;align-items:center;gap:.8rem;
-    }
-    .h-kicker::before,.h-kicker::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(200,149,74,.3))}
-    .h-kicker::after{background:linear-gradient(to left,transparent,rgba(200,149,74,.3))}
-    .h-q{
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2.6rem,5.5vw,5.2rem);
-      font-weight:300;font-style:italic;line-height:1.15;
-      color:var(--warm);max-width:860px;
-      opacity:0;animation:fu 1.4s .45s ease forwards;
-    }
-    .h-q em{color:var(--amber2);font-style:italic;position:relative}
-    .h-q em::after{
-      content:'';position:absolute;bottom:-2px;left:0;right:0;
-      height:1px;background:var(--amber2);opacity:.4;
-    }
-    .h-by{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--fog);letter-spacing:.2em;margin-top:1.4rem;opacity:0;animation:fu 1.2s .7s ease forwards}
-    .h-sub{
-      font-size:.92rem;color:var(--fog2);margin-top:2.2rem;
-      line-height:1.85;max-width:540px;
-      opacity:0;animation:fu 1.2s .9s ease forwards;
-    }
-    .h-sub strong{color:var(--cream);font-weight:400}
-
-    .h-scroll{
-      margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;
-      opacity:0;animation:fu 1.2s 1.4s ease forwards;
-    }
-    .h-scroll-t{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.25em;color:var(--fog);text-transform:uppercase}
-    .h-line{width:1px;height:70px;background:linear-gradient(to bottom,var(--amber),transparent);animation:sp 2.2s ease-in-out infinite}
-    @keyframes sp{0%,100%{opacity:.2;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1)}}
-    @keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-    .scene-label{
-      position:fixed;bottom:2rem;left:3rem;z-index:50;
-      font-family:'Space Mono',monospace;font-size:.48rem;
-      letter-spacing:.15em;color:rgba(200,149,74,.45);text-transform:uppercase;
-      opacity:0;animation:fu 1s 2s ease forwards;
-    }
-
-    #principles{padding:10rem 3rem;max-width:1300px;margin:0 auto}
-    .s-title{
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2.2rem,4vw,3.8rem);
-      font-weight:300;line-height:1.12;margin-bottom:5rem;max-width:680px;
-    }
-    .pg{
-      display:grid;grid-template-columns:repeat(2,1fr);
-      gap:1px;background:var(--gb);border:1px solid var(--gb);
-    }
-    .pc{
-      background:rgba(26,22,16,0.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:3rem 2.5rem;
-      position:relative;overflow:hidden;cursor:pointer;
-      transition:background .5s,box-shadow .5s;
-    }
-    .pc::after{
-      content:'';position:absolute;inset:0;
-      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(200,149,74,.06) 0%, transparent 60%);
-      opacity:0;transition:opacity .4s;pointer-events:none;
-    }
-    .pc:hover::after{opacity:1}
-    .pc::before{
-      content:'';position:absolute;top:0;left:0;width:0;height:2px;
-      background:linear-gradient(to right,var(--amber),var(--amber2));
-      transition:width .6s cubic-bezier(.23,1,.32,1);
-    }
-    .pc:hover::before{width:100%}
-    .pc:hover{background:rgba(200,149,74,.04);box-shadow:0 12px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06)}
-    .pc-num{
-      font-family:'Space Mono',monospace;font-size:.48rem;
-      letter-spacing:.2em;color:var(--amber);text-transform:uppercase;
-      margin-bottom:1.5rem;opacity:.6;
-    }
-    .pc-name{
-      font-family:'Cormorant Garamond',serif;font-size:1.6rem;
-      font-weight:400;color:var(--warm);margin-bottom:.9rem;line-height:1.2;
-    }
-    .pc-body{font-size:.83rem;color:var(--fog2);line-height:1.85;font-weight:300}
-    .pc-arrow{
-      display:inline-block;margin-top:1.5rem;
-      font-family:'Space Mono',monospace;font-size:.5rem;
-      letter-spacing:.15em;color:var(--amber);text-transform:uppercase;
-      border-bottom:1px solid rgba(200,149,74,.3);padding-bottom:2px;
-      transition:all .3s;opacity:.7;
-    }
-    .pc:hover .pc-arrow{opacity:1;letter-spacing:.25em}
-
-    #dashboard{padding:6rem 0 10rem}
-    .dash-wrap{
-      max-width:1440px;margin:0 auto;padding:0 3rem;
-    }
-    .dash-head{
-      display:flex;align-items:flex-end;justify-content:space-between;
-      margin-bottom:3.5rem;flex-wrap:wrap;gap:2rem;
-    }
-    .dash-hl{
-      font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.22em;
-      color:var(--sage2);text-transform:uppercase;margin-bottom:.5rem;
-      display:flex;align-items:center;gap:.6rem;
-    }
-    .dash-hl::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sage2);animation:breathe 2.5s infinite}
-    .dash-t{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--warm)}
-    .dash-sub{font-size:.8rem;color:var(--fog2);margin-top:.4rem}
-    .dash-sub strong{color:var(--amber2)}
-    .dash-note{
-      max-width:300px;
-      background:rgba(96,136,120,.08);
-      border:1px solid rgba(96,136,120,.18);
-      border-radius:10px 10px 10px 2px;
-      padding:1.2rem 1.5rem;
-      font-size:.78rem;color:var(--cream);line-height:1.7;font-style:italic;
-    }
-    .dash-note-by{
-      display:block;font-style:normal;font-family:'Space Mono',monospace;
-      font-size:.5rem;letter-spacing:.1em;color:var(--sage2);margin-top:.7rem;
-    }
-
-    /* 3D perspective wrapper for dashboard panels */
-    .dash-3d{
-      perspective:1800px;
-      perspective-origin:50% 0%;
-    }
-    .dash-inner{
-      transform:rotateX(1.5deg);
-      transform-style:preserve-3d;
-      transition:transform .6s ease;
-    }
-    .dash-3d:hover .dash-inner{transform:rotateX(0deg)}
-
-    /* Chart panel */
-    .chart-panel{
-      background:rgba(255,255,255,.018);
-      border:1px solid var(--gb);border-radius:20px;
-      padding:2.5rem;margin-bottom:2px;overflow:hidden;position:relative;
-    }
-    .chart-panel::before{
-      content:'';position:absolute;inset:0;border-radius:20px;
-      background:linear-gradient(135deg,rgba(200,149,74,.03) 0%,transparent 50%,rgba(96,136,120,.02) 100%);
-      pointer-events:none;
-    }
-    .cp-header{
-      display:flex;align-items:center;justify-content:space-between;
-      margin-bottom:1.8rem;flex-wrap:wrap;gap:1rem;
-    }
-    .cp-label{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.2em;color:var(--fog);text-transform:uppercase}
-    .cp-hint{font-size:.68rem;color:var(--fog);font-style:italic}
-    .chart-track{position:relative;height:220px;cursor:crosshair}
-    #ec{display:block;width:100%;height:100%}
-    /* Tooltip */
-    #tt{
-      position:absolute;pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:20;
-      background:rgba(42,35,24,0.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-      border:1px solid rgba(200,149,74,.25);border-radius:10px;
-      padding:.8rem 1.1rem;min-width:160px;
-      box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .tt-w{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.15em;color:var(--amber);text-transform:uppercase;margin-bottom:.35rem}
-    .tt-s{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--warm);line-height:1.2}
-    .tt-n{font-size:.7rem;color:var(--fog2);margin-top:.3rem;line-height:1.55;font-style:italic}
-    /* Scrubber */
-    #scr{position:absolute;top:0;bottom:0;width:1px;background:rgba(200,149,74,.4);pointer-events:none;opacity:0;transition:opacity .12s}
-    #scr::before{content:'';position:absolute;top:-5px;left:-4.5px;width:10px;height:10px;border-radius:50%;background:var(--amber);border:2px solid var(--ink)}
-    .chart-markers{display:flex;justify-content:space-between;margin-top:.9rem}
-    .cm{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.1em;color:var(--fog);text-transform:uppercase}
-    .cm.t{color:var(--sage2)}
-
-    /* Metrics */
-    .metrics-grid{
-      display:grid;grid-template-columns:repeat(3,1fr) 1.5fr;
-      gap:2px;margin-bottom:2px;
-    }
-    .mc{
-      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:2.2rem 2rem;position:relative;overflow:hidden;
-      transition:background .3s;cursor:default;
-    }
-    .mc:hover{background:rgba(58,50,40,0.4)}
-    .mc::after{
-      content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-      background:linear-gradient(to right,transparent,var(--amber),transparent);
-      opacity:0;transition:opacity .4s;
-    }
-    .mc:hover::after{opacity:.3}
-    .mv{
-      font-family:'Cormorant Garamond',serif;font-size:4rem;
-      font-weight:300;line-height:1;color:var(--warm);
-    }
-    .mv sup{font-size:1.4rem;color:var(--fog)}
-    .ml{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:var(--amber);text-transform:uppercase;margin-top:.4rem}
-    .mb{height:2px;background:var(--gb);border-radius:1px;margin-top:.8rem;overflow:hidden}
-    .mbf{height:100%;border-radius:1px;background:linear-gradient(to right,var(--olive),var(--amber));width:0;transition:width 1.6s cubic-bezier(.23,1,.32,1)}
-    .ec-panel{
-      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:2.2rem;
-      border-left:1px solid var(--gb);
-    }
-    .ec-t{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--warm);margin-bottom:.4rem}
-    .ec-n{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.1em;color:var(--amber);margin-bottom:.9rem}
-    .ec-b{font-size:.78rem;color:var(--fog2);line-height:1.75}
-
-    /* Freq + intervention */
-    .lower-grid{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:2px;margin-bottom:2px}
-    .lc{
-      background:rgba(42,35,24,0.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:1.8rem 2rem;
-    }
-    .lc-l{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.15em;color:var(--fog);text-transform:uppercase;margin-bottom:1.1rem}
-    .dots{display:flex;flex-wrap:wrap;gap:7px}
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--gb);transition:transform .2s}
-    .dot.s{background:var(--rose)}
-    .dot.t{background:var(--sage)}
-    .dot:hover{transform:scale(1.4)}
-    .bars{display:flex;gap:5px;align-items:flex-end;height:68px;margin-top:.5rem}
-    .bar{flex:1;border-radius:2px 2px 0 0;transition:opacity .3s,transform .2s;cursor:default}
-    .bar:hover{opacity:1!important;transform:scaleY(1.05);transform-origin:bottom}
-
-    /* Intervention */
-    .int-card{
-      background:rgba(96,136,120,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-      border:1px solid rgba(96,136,120,.18);
-      padding:1.8rem;border-radius:4px;
-    }
-    .int-h{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
-    .int-dot{width:7px;height:7px;border-radius:50%;background:var(--sage2);animation:breathe 2.5s infinite}
-    .int-hl{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.15em;color:var(--sage2);text-transform:uppercase}
-    .int-t{font-size:.82rem;color:var(--cream);line-height:1.72;font-style:italic}
-    .int-btn{
-      display:inline-block;margin-top:1rem;font-family:'Space Mono',monospace;
-      font-size:.5rem;letter-spacing:.15em;color:var(--sage2);text-transform:uppercase;
-      border:1px solid rgba(96,136,120,.3);padding:.55rem 1rem;border-radius:2px;
-      cursor:pointer;transition:all .3s;
-    }
-    .int-btn:hover{background:rgba(96,136,120,.12);border-color:var(--sage2)}
-
-    /* Tapering plan */
-    .taper-panel{
-      margin-top:2px;padding:2.8rem;
-      background:rgba(255,255,255,.012);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-      border:1px solid var(--gb);border-radius:16px;
-    }
-    .tp-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
-    .tp-t{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--warm)}
-    .tp-sub{font-size:.78rem;color:var(--fog2);margin-top:.25rem}
-    .tp-note{font-family:'Space Mono',monospace;font-size:.47rem;color:var(--fog);letter-spacing:.1em;text-transform:uppercase;text-align:right;line-height:1.7}
-    .taper-steps{display:flex;position:relative}
-    .taper-steps::before{
-      content:'';position:absolute;top:23px;left:24px;right:24px;height:1px;
-      background:linear-gradient(to right,var(--terra),var(--sage));opacity:.2;z-index:0;
-    }
-    .ts{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
-    .ts-c{
-      width:46px;height:46px;border-radius:50%;
-      border:1px solid var(--gb);background:var(--ink);
-      display:flex;align-items:center;justify-content:center;
-      font-size:1rem;margin-bottom:.9rem;cursor:pointer;
-      transition:all .4s cubic-bezier(.23,1,.32,1);
-    }
-    .ts-c:hover,.ts-c.a{
-      border-color:var(--amber);background:rgba(200,149,74,.1);
-      transform:scale(1.15);box-shadow:0 0 20px rgba(200,149,74,.2);
-    }
-    .ts-l{font-family:'Space Mono',monospace;font-size:.47rem;letter-spacing:.1em;color:var(--fog);text-transform:uppercase;text-align:center}
-    .ts-d{font-size:.75rem;color:var(--cream);text-align:center;margin-top:.25rem}
-
-    /* ══════════════════════════════════
-       ETHICS / PHILOSOPHY
-    ══════════════════════════════════ */
-    #ethics{padding:10rem 3rem}
-    .eth-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center}
-    .eth-body{font-size:.88rem;color:var(--fog2);line-height:1.92}
-    .eth-body p+p{margin-top:1.3rem}
-    .eth-body strong{color:var(--cream);font-weight:400}
-    .eth-body .anno{
-      display:block;margin-top:1.6rem;
-      font-family:'Space Mono',monospace;font-size:.5rem;
-      letter-spacing:.12em;color:var(--amber);text-transform:uppercase;
-      border-left:2px solid var(--amber);padding-left:.8rem;opacity:.7;
-    }
-    .eth-q{
-      font-family:'Cormorant Garamond',serif;font-size:2rem;font-style:italic;
-      color:var(--warm);line-height:1.38;
-      border-left:2px solid var(--amber);padding-left:2.2rem;
-    }
-    .eth-q small{
-      display:block;font-family:'Inter',sans-serif;font-size:.68rem;
-      color:var(--fog);font-style:normal;letter-spacing:.12em;margin-top:1.2rem;
-    }
-    .eth-q .signature{
-      display:block;margin-top:2rem;
-      font-family:'Space Mono',monospace;font-size:.48rem;
-      letter-spacing:.18em;color:rgba(200,149,74,.5);text-transform:uppercase;
-    }
-
-    #closing{
-      padding:8rem 3rem;text-align:center;
-      background:linear-gradient(to bottom,transparent,rgba(13,11,8,.6),transparent);
-    }
-    .cl-q{
-      font-family:'Cormorant Garamond',serif;
-      font-size:clamp(2rem,4vw,3.2rem);font-style:italic;font-weight:300;
-      color:var(--warm);max-width:700px;margin:0 auto;line-height:1.3;
-    }
-    .cl-sub{font-size:.82rem;color:var(--fog2);margin-top:1.8rem;line-height:1.7}
-    .cl-badge{
-      display:inline-flex;align-items:center;gap:.8rem;
-      margin-top:3rem;padding:.7rem 1.6rem;
-      border:1px solid var(--gb);border-radius:100px;
-      font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.15em;color:var(--fog);
-    }
-    .cl-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:.6}
-
-    footer{
-      padding:2.5rem 3rem;border-top:1px solid var(--gb);
-      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-    }
-    .fc{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.12em;color:var(--fog);text-transform:uppercase}
-    .fp{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--olive)}
-
-    .mo{
-      position:fixed;inset:0;background:rgba(5,4,3,.92);z-index:1000;
-      display:flex;align-items:center;justify-content:center;
-      opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(14px);
-    }
-    .mo.open{opacity:1;pointer-events:all}
-    .mb-modal{
-      background:rgba(42,35,24,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-      box-shadow:0 16px 64px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.06);
-      border:1px solid var(--gb);border-radius:18px;
-      padding:3.5rem;max-width:540px;width:92%;
-      transform:translateY(18px);transition:transform .4s ease;
-    }
-    .mo.open .mb-modal{transform:translateY(0)}
-    .mt{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--warm);margin-bottom:1.2rem}
-    .mbody{font-size:.83rem;color:var(--fog2);line-height:1.82}
-    .mbody p+p{margin-top:1rem}
-    .mbody strong{color:var(--cream);font-weight:400}
-    .mbody em{color:var(--amber2);font-style:italic}
-    .mc-btn{
-      margin-top:2.2rem;display:inline-block;font-family:'Space Mono',monospace;
-      font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
-      color:var(--amber);border:1px solid var(--amber);padding:.65rem 1.5rem;
-      border-radius:2px;cursor:pointer;transition:all .3s;
-    }
-    .mc-btn:hover{background:rgba(200,149,74,.08)}
-
-    .rv{opacity:0;transform:translateY(28px);transition:opacity .85s ease,transform .85s ease}
-    .rv.in{opacity:1;transform:translateY(0)}
-
-    @media(max-width:900px){
-      nav{padding:1rem 1.5rem}
-      .nav-links{display:none}
-      #hero{padding:7rem 1.5rem 4rem}
-      .pg{grid-template-columns:1fr}
-      .eth-inner{grid-template-columns:1fr;gap:3.5rem}
-      .metrics-grid{grid-template-columns:1fr}
-      .lower-grid{grid-template-columns:1fr}
-      .dash-head{flex-direction:column;align-items:flex-start}
-      .taper-steps{flex-direction:column;gap:1.5rem}
-      .taper-steps::before{display:none}
-      .mb-modal{padding:2.5rem}
-      #tt{display:none !important}
-      #principles,#dashboard .dash-wrap,#ethics,#closing,footer{padding-left:1.5rem;padding-right:1.5rem}
-    }
-  </style>
+  <!-- Three.js import map (must be in <head> before any module scripts) -->
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three":         "https://unpkg.com/three@0.160.0/build/three.module.js",
         "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
       }
     }
@@ -443,12 +25,18 @@
 </head>
 <body>
 
+<!-- ── Background Canvas ──────────────────────────────────── -->
 <canvas id="c3d"></canvas>
 <div id="vignette"></div>
-<div class="cur" id="cur"></div>
+
+<!-- ── Custom Cursor ──────────────────────────────────────── -->
+<div class="cur"  id="cur"></div>
 <div class="cur-r" id="cur-r"></div>
+
+<!-- ── Scene Label ────────────────────────────────────────── -->
 <div class="scene-label">Memory Constellation · Session Network · Live</div>
 
+<!-- ── Navigation ─────────────────────────────────────────── -->
 <nav>
   <div class="nb">
     <div class="nb-dot"></div>
@@ -462,6 +50,9 @@
   <span class="nav-r">Team Maze · Mohit · MUJ 2026</span>
 </nav>
 
+<!-- ═══════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════ -->
 <section id="hero">
   <div class="h-kicker">Reality Reimagined</div>
   <h1 class="h-q">
@@ -479,28 +70,51 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     PRINCIPLES
+════════════════════════════════════════════════════════ -->
 <section id="principles">
   <h2 class="s-title rv">The hardest thing we had to design away from was the impulse to intervene.</h2>
+
   <div class="pg rv">
-    <div class="pc" tabindex="0" onclick="openM('w')" onkeydown="if(event.key==='Enter')openM('w')" onmousemove="pcGlow(this,event)">
+    <!-- 01 Protect -->
+    <div class="pc" tabindex="0"
+         onclick="openM('w')"
+         onkeydown="if(event.key==='Enter')openM('w')"
+         onmousemove="pcGlow(this,event)">
       <div class="pc-num">01 / Protect</div>
       <h3 class="pc-name">Protect Wellbeing</h3>
       <p class="pc-body">The console doesn't track engagement because engagement is good. It tracks it because <em>patterns in time</em> can tell a trained human something that a grieving person can't say out loud yet.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" tabindex="0" onclick="openM('p')" onkeydown="if(event.key==='Enter')openM('p')" onmousemove="pcGlow(this,event)">
+
+    <!-- 02 Illuminate -->
+    <div class="pc" tabindex="0"
+         onclick="openM('p')"
+         onkeydown="if(event.key==='Enter')openM('p')"
+         onmousemove="pcGlow(this,event)">
       <div class="pc-num">02 / Illuminate</div>
       <h3 class="pc-name">Illuminate Patterns</h3>
       <p class="pc-body">Mara's sessions started at 3am. Then 2am. Then 1am. The console noted this. The counselor noticed a window. They opened it — gently. No alert was ever sent to Mara.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" tabindex="0" onclick="openM('b')" onkeydown="if(event.key==='Enter')openM('b')" onmousemove="pcGlow(this,event)">
+
+    <!-- 03 Honor -->
+    <div class="pc" tabindex="0"
+         onclick="openM('b')"
+         onkeydown="if(event.key==='Enter')openM('b')"
+         onmousemove="pcGlow(this,event)">
       <div class="pc-num">03 / Honor</div>
       <h3 class="pc-name">Honor the Bond</h3>
       <p class="pc-body">The AI presence is not a product feature. It is the closest thing to a last conversation that some people will ever have. Every system decision was made from inside that weight.</p>
       <span class="pc-arrow">Read more →</span>
     </div>
-    <div class="pc" tabindex="0" onclick="openM('g')" onkeydown="if(event.key==='Enter')openM('g')" onmousemove="pcGlow(this,event)">
+
+    <!-- 04 Guide -->
+    <div class="pc" tabindex="0"
+         onclick="openM('g')"
+         onkeydown="if(event.key==='Enter')openM('g')"
+         onmousemove="pcGlow(this,event)">
       <div class="pc-num">04 / Guide</div>
       <h3 class="pc-name">Guide, Never Police</h3>
       <p class="pc-body">The tapering plan is not a prescription. It is a sentence the counselor might begin: <em>"I've noticed the visits feel lighter lately — is that true for you?"</em></p>
@@ -509,8 +123,13 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════════════════════ -->
 <section id="dashboard">
   <div class="dash-wrap">
+
+    <!-- Header -->
     <div class="dash-head rv">
       <div>
         <p class="dash-hl">Counselor View — Compassionate Care Mode</p>
@@ -523,9 +142,11 @@
       </div>
     </div>
 
+    <!-- 3-D perspective wrapper -->
     <div class="dash-3d">
       <div class="dash-inner">
-        
+
+        <!-- Emotional Journey Chart -->
         <div class="chart-panel rv">
           <div class="cp-header">
             <span class="cp-label">Emotional Journey — 14-Week Arc</span>
@@ -549,6 +170,7 @@
           </div>
         </div>
 
+        <!-- Metrics -->
         <div class="metrics-grid rv">
           <div class="mc" title="Present in session — emotionally engaged">
             <div class="mv"><span id="m1">0</span><sup>%</sup></div>
@@ -572,6 +194,7 @@
           </div>
         </div>
 
+        <!-- Lower Grid -->
         <div class="lower-grid rv">
           <div class="lc">
             <p class="lc-l">Session Frequency — 14 Weeks</p>
@@ -592,6 +215,7 @@
           </div>
         </div>
 
+        <!-- Tapering Plan -->
         <div class="taper-panel rv">
           <div class="tp-head">
             <div>
@@ -602,11 +226,16 @@
           </div>
           <div class="taper-steps" id="tsteps"></div>
         </div>
-      </div>
-    </div>
-  </div>
+
+      </div><!-- /.dash-inner -->
+    </div><!-- /.dash-3d -->
+
+  </div><!-- /.dash-wrap -->
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     ETHICS
+════════════════════════════════════════════════════════ -->
 <section id="ethics">
   <div class="eth-inner">
     <div class="rv">
@@ -628,6 +257,9 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     CLOSING
+════════════════════════════════════════════════════════ -->
 <section id="closing">
   <div class="rv">
     <p class="cl-q">"Session 34 — the first time Mara laughed."</p>
@@ -636,438 +268,30 @@
   </div>
 </section>
 
+<!-- ── Footer ──────────────────────────────────────────────── -->
 <footer>
   <span class="fc">Grief-Tech Ethics Console · Reality Reimagined · 2026</span>
   <span class="fp">"A companion for the space between."</span>
 </footer>
 
+<!-- ── Modal ───────────────────────────────────────────────── -->
 <div class="mo" id="mo" onclick="tryCloseM(event)">
   <div class="mb-modal">
     <h2 class="mt" id="mt"></h2>
     <div class="mbody" id="mbody"></div>
-    <span class="mc-btn" tabindex="0" onclick="closeM()" onkeydown="if(event.key==='Enter')closeM()">Close ✕</span>
+    <span class="mc-btn" tabindex="0"
+          onclick="closeM()"
+          onkeydown="if(event.key==='Enter')closeM()">Close ✕</span>
   </div>
 </div>
 
-<script>
-const cur = document.getElementById('cur');
-const curR = document.getElementById('cur-r');
-let mx=-100,my=-100,rx=-100,ry=-100;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.transform=`translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`});
-(function ac(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;curR.style.transform=`translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;requestAnimationFrame(ac)})();
-document.querySelectorAll('a,.pc,.ts-c,.int-btn,.mc-btn,.nav-links li').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';curR.style.width='54px';curR.style.height='54px';curR.style.borderColor='rgba(200,149,74,.65)'});
-  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';curR.style.width='36px';curR.style.height='36px';curR.style.borderColor='rgba(200,149,74,.4)'});
-});
+<!-- ── Scripts ─────────────────────────────────────────────── -->
 
-function pcGlow(el,e){
-  const r=el.getBoundingClientRect();
-  el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-  el.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-}
+<!-- Main application logic (cursor, chart, metrics, modals) -->
+<script src="main.js"></script>
 
-const CD=[
-  {w:1,  v:.88, s:'Deep Distress',     n:'First session — she asked if it could hear her. It said yes.'},
-  {w:2,  v:.80, s:'Acute Grief',       n:'Three sessions this week. Longest: 2h 14m. All after midnight.'},
-  {w:3,  v:.74, s:'Acute Grief',       n:'Started ending sessions by asking what he would have said.'},
-  {w:4,  v:.68, s:'Heavy Sorrow',      n:'Cadence slowing. First daytime session — 2:40pm on a Tuesday.'},
-  {w:5,  v:.61, s:'Processing',        n:'She described a memory unprompted. Not a question. A memory.'},
-  {w:6,  v:.54, s:'Processing',        n:'Reflection depth up. She corrected the AI once. Good sign.'},
-  {w:7,  v:.49, s:'Equilibrium',       n:'Midpoint. Sessions now 3× / week. Consistent hour, consistent length.'},
-  {w:8,  v:.46, s:'Equilibrium',       n:'Coping language entering sessions: "I think I understand now."'},
-  {w:9,  v:.43, s:'Gentle Acceptance', n:'Sessions shorter. She ends them. Counselor notes the shift.'},
-  {w:10, v:.39, s:'Gentle Acceptance', n:'"I don\'t need to ask him anything today." First time she said that.'},
-  {w:11, v:.36, s:'Integration',       n:'Memory becoming context — something she refers to, not dwells in.'},
-  {w:12, v:.33, s:'Tapering Begins',   n:'Counselor introduced the idea. Mara said she\'d been thinking it too.'},
-  {w:13, v:.30, s:'Moving Forward',    n:'Chose 1× / week herself. "I want to remember it as a choice."'},
-  {w:14, v:.27, s:'Renewed Capacity',  n:'Session 34: she laughed. 38 minutes. She ended it.'},
-];
-let cxs=[],cys=[],cw2=0,ch2=0,pinned=null,prog=0,animId=null;
-
-function drawChart(pct=1){
-  const c=document.getElementById('ec');
-  const ctx=c.getContext('2d');
-  const wrap=document.getElementById('cw');
-  cw2=wrap.clientWidth; ch2=wrap.clientHeight;
-  c.width=cw2; c.height=ch2;
-  const PL=20,PR=20,PT=28,PB=30,W=cw2-PL-PR,H=ch2-PT-PB;
-  cxs=CD.map((_,i)=>PL+(i/(CD.length-1))*W);
-  cys=CD.map(d=>PT+d.v*H);
-  ctx.clearRect(0,0,cw2,ch2);
-  [.2,.4,.6,.8].forEach(g=>{const gy=PT+g*H;ctx.beginPath();ctx.moveTo(PL,gy);ctx.lineTo(cw2-PR,gy);ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=1;ctx.stroke()});
-  const tx=cxs[11];
-  const tg=ctx.createLinearGradient(tx,0,cw2-PR,0);
-  tg.addColorStop(0,'rgba(96,136,120,.06)');tg.addColorStop(1,'rgba(96,136,120,0)');
-  ctx.fillStyle=tg;ctx.fillRect(tx,PT,cw2-PR-tx,H);
-  ctx.setLineDash([3,6]);ctx.beginPath();ctx.moveTo(tx,PT);ctx.lineTo(tx,PT+H);
-  ctx.strokeStyle='rgba(168,196,160,.22)';ctx.lineWidth=1.5;ctx.stroke();ctx.setLineDash([]);
-  ctx.font='600 8px "Space Mono",monospace';ctx.fillStyle='rgba(168,196,160,.45)';ctx.textAlign='left';ctx.fillText('TAPERING',tx+7,PT+10);
-  ctx.font='7.5px "Space Mono",monospace';ctx.textAlign='right';
-  ctx.fillStyle='rgba(192,112,64,.45)';ctx.fillText('DISTRESS',cw2-PR,PT+8);
-  ctx.fillStyle='rgba(96,136,120,.45)';ctx.fillText('CALM',cw2-PR,PT+H-4);
-  const upTo=Math.floor(pct*(CD.length-1)),frac=pct*(CD.length-1)-upTo;
-  if(upTo<1)return;
-  const ag=ctx.createLinearGradient(PL,0,cw2-PR,0);
-  ag.addColorStop(0,'rgba(192,112,64,.2)');ag.addColorStop(.65,'rgba(200,149,74,.09)');ag.addColorStop(1,'rgba(96,136,120,.05)');
-  ctx.beginPath();ctx.moveTo(cxs[0],cys[0]);
-  for(let i=0;i<upTo;i++){const cx2=(cxs[i]+cxs[i+1])/2;const ny=i+1===upTo&&frac>0?cys[i]+(cys[i+1]-cys[i])*frac:cys[i+1];const nx2=i+1===upTo&&frac>0?cxs[i]+(cxs[i+1]-cxs[i])*frac:cxs[i+1];ctx.bezierCurveTo(cx2,cys[i],cx2,ny,nx2,ny)}
-  const lx=upTo<CD.length-1?cxs[upTo]+(cxs[upTo+1]-cxs[upTo])*frac:cxs[upTo];
-  ctx.lineTo(lx,PT+H);ctx.lineTo(PL,PT+H);ctx.closePath();ctx.fillStyle=ag;ctx.fill();
-  const lg=ctx.createLinearGradient(PL,0,cw2-PR,0);
-  lg.addColorStop(0,'#c07040');lg.addColorStop(.55,'#c8954a');lg.addColorStop(1,'#608878');
-  ctx.beginPath();ctx.moveTo(cxs[0],cys[0]);
-  for(let i=0;i<upTo;i++){const cx2=(cxs[i]+cxs[i+1])/2;const ny=i+1===upTo&&frac>0?cys[i]+(cys[i+1]-cys[i])*frac:cys[i+1];const nx2=i+1===upTo&&frac>0?cxs[i]+(cxs[i+1]-cxs[i])*frac:cxs[i+1];ctx.bezierCurveTo(cx2,cys[i],cx2,ny,nx2,ny)}
-  ctx.strokeStyle=lg;ctx.lineWidth=2.8;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
-  for(let i=0;i<=upTo&&i<CD.length;i++){
-    const ip=pinned===i,r2=ip?8:5;
-    ctx.beginPath();ctx.arc(cxs[i],cys[i],r2,0,Math.PI*2);
-    ctx.fillStyle=i<=11?(ip?'#e08050':'#c07040'):(ip?'#80b898':'#608878');ctx.fill();
-    ctx.strokeStyle=ip?'rgba(250,247,242,.65)':'rgba(250,247,242,.2)';ctx.lineWidth=ip?2:1.5;ctx.stroke();
-    if(ip){ctx.beginPath();ctx.arc(cxs[i],cys[i],r2+6,0,Math.PI*2);ctx.strokeStyle='rgba(200,149,74,.22)';ctx.lineWidth=1.5;ctx.stroke()}
-  }
-}
-function animChart(){if(animId)cancelAnimationFrame(animId);prog=0;const dur=2000,st=performance.now();(function step(now){const p=Math.min((now-st)/dur,1);prog=1-Math.pow(1-p,3);drawChart(prog);if(p<1)animId=requestAnimationFrame(step)})(st)}
-function closest2(mx2){if(!cxs.length)return -1;let b=0,bd=1e9;cxs.forEach((x,i)=>{const d=Math.abs(x-mx2);if(d<bd){bd=d;b=i}});return bd<44?b:-1}
-function showTT(idx){const d=CD[idx],tt=document.getElementById('tt'),s=document.getElementById('scr');document.getElementById('tw').textContent=`Week ${d.w}`;document.getElementById('ts').textContent=d.s;document.getElementById('tn').textContent=d.n;let lx=cxs[idx]+15,ly=cys[idx]-25;if(cxs[idx]>cw2/2)lx=cxs[idx]-tt.offsetWidth-15;if(ly<0)ly=10;if(ly+tt.offsetHeight>ch2)ly=ch2-tt.offsetHeight-10;tt.style.left=lx+'px';tt.style.top=ly+'px';tt.style.opacity='1';s.style.left=cxs[idx]+'px';s.style.opacity='1'}
-function hideTT(){if(pinned!==null)return;document.getElementById('tt').style.opacity='0';document.getElementById('scr').style.opacity='0'}
-function initChart(){const wrap=document.getElementById('cw');wrap.addEventListener('mousemove',e=>{const rr=wrap.getBoundingClientRect();const idx=closest2(e.clientX-rr.left);if(idx>=0){showTT(idx);drawChart(prog)}else if(pinned===null){document.getElementById('tt').style.opacity='0';document.getElementById('scr').style.opacity='0'}});wrap.addEventListener('mouseleave',()=>{if(pinned===null)hideTT()});wrap.addEventListener('click',e=>{const rr=wrap.getBoundingClientRect();const idx=closest2(e.clientX-rr.left);if(idx>=0){pinned=(pinned===idx)?null:idx;if(pinned===null)hideTT();else showTT(pinned);drawChart(prog)}})}
-
-function buildDots(){const el=document.getElementById('fdots');'sss_ss_ss_sss_ss_sss_ss_ss_tt_t_tt_t'.split('').forEach(p=>{const d=document.createElement('div');d.className='dot'+(p==='s'?' s':p==='t'?' t':'');el.appendChild(d)})}
-function buildBars(){const el=document.getElementById('fbars');[3,4,3,4,4,3,3,4,3,2,2,2,1,1].forEach((v,i)=>{const b=document.createElement('div');const tp=i>=11;b.className='bar';b.style.cssText=`flex:1;height:${(v/4)*100}%;background:${tp?'#608878':'#c8954a'};opacity:${tp?.5:.4};border-radius:2px 2px 0 0`;b.addEventListener('mouseenter',()=>{b.style.opacity='1'});b.addEventListener('mouseleave',()=>{b.style.opacity=tp?.5:.4});el.appendChild(b)})}
-function buildTaper(){const steps=[{l:'Now',d:'2× / week',e:'⟳'},{l:'Month 2',d:'1× / week',e:'◑'},{l:'Month 3',d:'2× / month',e:'◔'},{l:'Month 4',d:'1× / month',e:'○'},{l:'Month 5+',d:'When she wants',e:'✦'}];const el=document.getElementById('tsteps');steps.forEach((s,i)=>{const div=document.createElement('div');div.className='ts';div.innerHTML=`<div class="ts-c ${i===0?'a':''}" onclick="selTaper(this)">${s.e}</div><p class="ts-l">${s.l}</p><p class="ts-d">${s.d}</p>`;el.appendChild(div)})}
-function selTaper(el){document.querySelectorAll('.ts-c').forEach(c=>c.classList.remove('a'));el.classList.add('a')}
-function counter(id,target,dur){const el=document.getElementById(id),st=performance.now();(function step(now){const p=Math.min((now-st)/dur,1);el.textContent=Math.round((1-Math.pow(1-p,3))*target);if(p<1)requestAnimationFrame(step)})(st)}
-
-let mAnimated=false,chartDone=false;
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');if(!mAnimated&&e.target.querySelector&&e.target.querySelector('#m1')){mAnimated=true;setTimeout(()=>{counter('m1',75,1300);counter('m2',60,1300);counter('m3',35,1300);document.getElementById('b1').style.width='75%';document.getElementById('b2').style.width='60%';document.getElementById('b3').style.width='35%'},400)}if(!chartDone&&e.target.classList.contains('chart-panel')){chartDone=true;setTimeout(animChart,250)}}})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-
-const MD={
-  w:{t:'Protect Wellbeing',b:`<p>The console doesn't track frequency because frequency is bad. It tracks it because a grief counselor — one human, watching over sometimes hundreds of clients — cannot always notice the 3am pattern alone.</p><br><p>We deliberately <strong>refused to build a risk-score system.</strong> Scores imply that some grief is more legitimate than others. Seasons don't. So the console surfaces seasons.</p>`},
-  p:{t:'Illuminate Patterns',b:`<p>Mara's sessions were shifting to later and later at night. The console noticed. It didn't alert Mara — it surfaced a note for her counselor, who opened the conversation as a question, not a concern.</p><br><p>That is the difference between <em>surveillance and care.</em> One watches. The other notices, and then asks.</p>`},
-  b:{t:'Honor the Bond',b:`<p>We spent three months arguing about whether to include a "This is not a real person" disclaimer at the start of each session. We removed it.</p><br><p>Everyone knows. <strong>Saying it again is cruelty wearing the clothes of caution.</strong> The bond between Mara and what she visits is not a delusion — it is a space she has chosen, consensually, to process something unprocessable.</p>`},
-  g:{t:'Guide, Never Police',b:`<p>Early versions of this console sent a push notification to the user when the system detected "elevated dependency." We removed it in month 3 after our ethics review.</p><br><p>The problem: <em>who decides what elevated means?</em> Not the algorithm. The notification went. The counselor remained. <strong>That's the console's only job: give the counselor more to work with.</strong></p>`},
-  tap:{t:'Opening the Tapering Dialogue',b:`<p>The tapering plan is never presented to Mara. It is offered to the counselor as a possible shape for a conversation.</p><br><p>The conversation might begin: <em>"I've noticed the visits feel lighter lately. Is that true for you?"</em></p><br><p>If Mara says yes, the conversation continues. If she says no, nothing changes. The console updates. The counselor listens. <strong>The timeline is hers.</strong></p>`},
-};
-function openM(k){const d=MD[k];if(!d)return;document.getElementById('mt').textContent=d.t;document.getElementById('mbody').innerHTML=d.b;document.getElementById('mo').classList.add('open');document.body.classList.add('no-scroll')}
-function closeM(){document.getElementById('mo').classList.remove('open');document.body.classList.remove('no-scroll')}
-function tryCloseM(e){if(e.target===document.getElementById('mo'))closeM()}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
-
-window.addEventListener('load',()=>{animChart();initChart();buildDots();buildBars();buildTaper()});
-window.addEventListener('resize',()=>drawChart(prog));
-</script>
-
-<script type="module">
-import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-
-const canvas = document.getElementById('c3d');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0d0b08);
-scene.fog = new THREE.FogExp2(0x0c0a07, 0.013);
-
-const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 500);
-camera.position.set(0, 6, 72);
-
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(
-  new THREE.Vector2(innerWidth, innerHeight),
-  0.6,   // bloom strength — reduced to avoid blinding brightness
-  0.4,   // bloom radius
-  0.25   // threshold — glow starts at this luminance
-);
-composer.addPass(bloom);
-composer.addPass(new OutputPass());
-
-scene.add(new THREE.AmbientLight(0x0d0904, 1.5));
-
-const kLight = new THREE.PointLight(0xe09040, 25, 130);
-kLight.position.set(22, 38, 18);
-scene.add(kLight);
-
-const fLight = new THREE.PointLight(0x3d8068, 12, 110);
-fLight.position.set(-40, -12, 8);
-scene.add(fLight);
-
-const rLight = new THREE.PointLight(0x8b3a10, 7, 85);
-rLight.position.set(0, -35, -28);
-scene.add(rLight);
-
-const coreVert = `
-  varying vec3 vNormal;
-  varying vec3 vViewPos;
-  void main() {
-    vNormal = normalize(normalMatrix * normal);
-    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
-    vViewPos = -mvPos.xyz;
-    gl_Position = projectionMatrix * mvPos;
-  }
-`;
-const coreFrag = `
-  uniform float uTime;
-  varying vec3 vNormal;
-  varying vec3 vViewPos;
-  void main() {
-    vec3 viewDir = normalize(vViewPos);
-    float fresnel = pow(1.0 - abs(dot(vNormal, viewDir)), 2.8);
-    float pulse = 0.85 + 0.15 * sin(uTime * 1.6);
-    vec3 innerCol = vec3(0.75, 0.38, 0.08);
-    vec3 rimCol = vec3(1.0, 0.72, 0.28);
-    vec3 col = mix(innerCol, rimCol, fresnel) * (1.8 + 0.6 * fresnel) * pulse;
-    float alpha = 0.12 + fresnel * 0.88;
-    gl_FragColor = vec4(col, alpha);
-  }
-`;
-const coreUniforms = { uTime: { value: 0 } };
-const coreMat = new THREE.ShaderMaterial({
-  uniforms: coreUniforms,
-  vertexShader: coreVert,
-  fragmentShader: coreFrag,
-  transparent: true,
-  side: THREE.FrontSide,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-});
-const coreGeo = new THREE.SphereGeometry(4.8, 64, 64);
-const core = new THREE.Mesh(coreGeo, coreMat);
-scene.add(core);
-
-const innerMat = new THREE.MeshStandardMaterial({
-  color: 0x8a3a10,
-  roughness: 0.05,
-  metalness: 0.95,
-  emissive: new THREE.Color(0x4a1c04),
-  emissiveIntensity: 2.0,
-});
-const innerCore = new THREE.Mesh(new THREE.SphereGeometry(3.2, 48, 48), innerMat);
-scene.add(innerCore);
-
-[6.5, 8.0, 10.5].forEach((r, i) => {
-  const rg = new THREE.RingGeometry(r, r + 0.18 - i * 0.04, 80);
-  const rm = new THREE.MeshBasicMaterial({
-    color: new THREE.Color().setHSL(0.08, 0.9, 0.55 - i * 0.1),
-    transparent: true,
-    opacity: 0.08 - i * 0.02,
-    side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-  });
-  const ring = new THREE.Mesh(rg, rm);
-  ring.rotation.x = Math.PI * (0.12 + i * 0.07);
-  ring.userData.rotSpeed = 0.008 - i * 0.002;
-  ring.userData.tilt = Math.PI * (0.12 + i * 0.07);
-  scene.add(ring);
-  core.userData['ring'+i] = ring;
-});
-
-const shellGeo = new THREE.IcosahedronGeometry(55, 2);
-const shellMat = new THREE.MeshBasicMaterial({
-  color: 0x3a2810,
-  wireframe: true,
-  transparent: true,
-  opacity: 0.04,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-});
-const shell = new THREE.Mesh(shellGeo, shellMat);
-scene.add(shell);
-
-const nnGroup = new THREE.Group();
-scene.add(nnGroup);
-
-const nnGeo = new THREE.BufferGeometry();
-const nnPos = [];
-const nnNodes = [];
-const clusterCenters = [new THREE.Vector3(-65, 0, -10), new THREE.Vector3(65, 0, -10)];
-
-clusterCenters.forEach(center => {
-  for (let i = 0; i < 45; i++) {
-    const x = center.x + (Math.random() - 0.5) * 45;
-    const y = center.y + (Math.random() - 0.5) * 45;
-    const z = center.z + (Math.random() - 0.5) * 35;
-    nnNodes.push(new THREE.Vector3(x, y, z));
-    nnPos.push(x, y, z);
-  }
-});
-nnGeo.setAttribute('position', new THREE.Float32BufferAttribute(nnPos, 3));
-
-const nnMat = new THREE.PointsMaterial({
-  color: 0x80b090, size: 0.5, transparent: true, opacity: 0.6,
-  blending: THREE.AdditiveBlending, depthWrite: false,
-});
-nnGroup.add(new THREE.Points(nnGeo, nnMat));
-
-const nnLineGeo = new THREE.BufferGeometry();
-const nnLinePos = [];
-for (let i = 0; i < nnNodes.length; i++) {
-  for (let j = i + 1; j < nnNodes.length; j++) {
-    if (nnNodes[i].distanceTo(nnNodes[j]) < 16) {
-      nnLinePos.push(
-        nnNodes[i].x, nnNodes[i].y, nnNodes[i].z,
-        nnNodes[j].x, nnNodes[j].y, nnNodes[j].z
-      );
-    }
-  }
-}
-nnLineGeo.setAttribute('position', new THREE.Float32BufferAttribute(nnLinePos, 3));
-const nnLineMat = new THREE.LineBasicMaterial({
-  color: 0x508068, transparent: true, opacity: 0.12,
-  blending: THREE.AdditiveBlending, depthWrite: false,
-});
-nnGroup.add(new THREE.LineSegments(nnLineGeo, nnLineMat));
-
-const sessions = [
-  {distress:.88},{distress:.80},{distress:.74},{distress:.68},
-  {distress:.61},{distress:.54},{distress:.49},{distress:.46},
-  {distress:.43},{distress:.39},{distress:.36},
-  {distress:.33},{distress:.30},{distress:.27},
-];
-const sessionNodes = [];
-const linesGroup = new THREE.Group();
-scene.add(linesGroup);
-
-sessions.forEach((s, i) => {
-  const t = 1 - s.distress;
-  const col = new THREE.Color().lerpColors(
-    new THREE.Color(0xd04820), new THREE.Color(0x30a878), t
-  );
-  const size = 0.6 + t * 0.7;
-  const geo = new THREE.SphereGeometry(size, 28, 28);
-  const mat = new THREE.MeshStandardMaterial({
-    color: col,
-    roughness: 0.08,
-    metalness: 0.92,
-    emissive: col.clone(),
-    emissiveIntensity: 1.8 + t * 0.8,  // bloom will pick up emissive and glow it
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-  const angle = (i / 14) * Math.PI * 2.8;
-  const elev = (i / 13 - 0.5) * 32;
-  const radius = 19 + Math.sin(i * 0.9) * 7;
-  mesh.position.set(Math.cos(angle) * radius, elev, Math.sin(angle) * radius);
-  mesh.userData = {
-    orbitAngle: angle, orbitRadius: radius,
-    orbitSpeed: 0.0007 + t * 0.0012,
-    orbitY: elev, phase: i * 0.44,
-  };
-  scene.add(mesh);
-  sessionNodes.push(mesh);
-});
-
-const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(800 * 3);
-for (let i = 0; i < 800 * 3; i++) pPos[i] = (Math.random() - 0.5) * 180;
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-  color: 0xd08040, size: 0.1, transparent: true, opacity: 0.18,
-  sizeAttenuation: true, blending: THREE.AdditiveBlending, depthWrite: false,
-})));
-
-let camAngle = 0, mox = 0, moy = 0, frame = 0;
-document.addEventListener('mousemove', e => {
-  mox = (e.clientX / innerWidth - 0.5);
-  moy = (e.clientY / innerHeight - 0.5);
-});
-
-(function animate() {
-  requestAnimationFrame(animate);
-  frame++;
-  const t = frame * 0.006;
-
-  camAngle += 0.001;
-  const tx = Math.sin(camAngle) * 70 + mox * 10;
-  const tz = Math.cos(camAngle) * 70;
-  const ty = 6 + moy * 7 + Math.sin(t * 0.3) * 3;
-  camera.position.x += (tx - camera.position.x) * 0.022;
-  camera.position.y += (ty - camera.position.y) * 0.022;
-  camera.position.z += (tz - camera.position.z) * 0.022;
-  camera.lookAt(0, 0, 0);
-
-  coreUniforms.uTime.value = t;
-
-  const cp = 1 + 0.05 * Math.sin(t * 1.5);
-  innerCore.scale.setScalar(cp);
-  innerMat.emissiveIntensity = 1.8 + 0.9 * Math.sin(t * 1.2);
-
-  ['ring0','ring1','ring2'].forEach((k, i) => {
-    const ring = core.userData[k];
-    if (ring) {
-      ring.rotation.z = t * (0.12 - i * 0.03);
-      ring.rotation.x = ring.userData.tilt + Math.sin(t * 0.25 + i) * 0.04;
-    }
-  });
-
-  shell.rotation.y = t * 0.015;
-  shell.rotation.x = t * 0.008;
-
-  nnGroup.rotation.y = Math.sin(t * 0.2) * 0.03;
-  nnGroup.rotation.z = Math.cos(t * 0.15) * 0.02;
-
-  kLight.position.x = 22 + Math.sin(t * 0.38) * 18;
-  kLight.position.y = 38 + Math.cos(t * 0.28) * 12;
-  fLight.position.x = -40 + Math.cos(t * 0.33) * 14;
-  fLight.position.y = -12 + Math.sin(t * 0.48) * 9;
-
-  kLight.color.setHSL(0.08 + 0.02 * Math.sin(t * 0.15), 0.85, 0.55);
-
-  if (frame % 2 === 0) {
-    linesGroup.clear();
-    sessionNodes.forEach((n, i) => {
-      n.userData.orbitAngle += n.userData.orbitSpeed;
-      const a = n.userData.orbitAngle;
-      const r = n.userData.orbitRadius;
-      n.position.x = Math.cos(a) * r;
-      n.position.z = Math.sin(a) * r;
-      n.position.y = n.userData.orbitY + Math.sin(t + n.userData.phase) * 1.4;
-      const br = 1 + 0.12 * Math.sin(t * 1.4 + n.userData.phase);
-      n.scale.setScalar(br);
-      n.material.emissiveIntensity = 1.6 + 0.8 * Math.sin(t + n.userData.phase);
-
-      const dist = n.position.length();
-      if (dist < 30) {
-        const geo = new THREE.BufferGeometry().setFromPoints([core.position.clone(), n.position.clone()]);
-        const alpha = (1 - dist / 30) * 0.4;
-        linesGroup.add(new THREE.Line(geo,
-          new THREE.LineBasicMaterial({ color: 0xb06030, transparent: true, opacity: alpha, blending: THREE.AdditiveBlending, depthWrite: false })
-        ));
-      }
-
-      if (i < sessionNodes.length - 1) {
-        const next = sessionNodes[i + 1];
-        const d2 = n.position.distanceTo(next.position);
-        if (d2 < 22) {
-          const geo2 = new THREE.BufferGeometry().setFromPoints([n.position.clone(), next.position.clone()]);
-          linesGroup.add(new THREE.Line(geo2,
-            new THREE.LineBasicMaterial({ color: 0x609878, transparent: true, opacity: (1 - d2 / 22) * 0.22, blending: THREE.AdditiveBlending, depthWrite: false })
-          ));
-        }
-      }
-    });
-  }
-
-  composer.render();  // UnrealBloom renders through the composer
-})();
-
-window.addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-  composer.setSize(innerWidth, innerHeight);
-  bloom.setSize(innerWidth, innerHeight);
-});
-</script>
+<!-- Three.js 3-D scene (ES Module) -->
+<script type="module" src="scene.js"></script>
 
 </body>
 </html>
